@@ -3,23 +3,21 @@ const O="khanepaz",R="khanepaz",B="main",A="https://api.github.com",K="kp_admin_
 const F={site:"data/site.json",categories:"data/categories.json",recipes:"data/recipes.json",tutorials:"data/tutorials.json",gallery:"data/gallery.json",comments:"data/comments.json"};
 let data={},shas={},dirty=new Set(),token="",tab="dashboard";
 const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
-const toast=(m,e)=>{const el=$("#toast");el.textContent=m;el.classList.toggle("err",!!e);el.classList.add("show");setTimeout(()=>el.classList.remove("show"),2800)};
+const toast=(m,e)=>{const el=$("#toast");el.textContent=m;el.classList.toggle("err",!!e);el.classList.add("show");setTimeout(()=>el.classList.remove("show"),3200)};
 const mark=k=>{dirty.add(k);const b=$("#saveAllBtn"),s=$("#saveStatus");b.hidden=!dirty.size;s.textContent=dirty.size?dirty.size+" فایل":"";s.className=dirty.size?"status dirty":"status"};
-async function gh(p,o={}){const r=await fetch(A+p,{...o,headers:{Accept:"application/vnd.github+json",Authorization:"Bearer "+token,"X-GitHub-Api-Version":"2022-11-28",...(o.body?{"Content-Type":"application/json"}:{}),...o.headers}});if(!r.ok){const e=await r.json().catch(()=>({}));throw new Error(e.message||"HTTP "+r.status)}return r.status===204?null:r.json()}
+async function gh(p,o={}){const r=await fetch(A+p,{...o,headers:{Accept:"application/vnd.github+json",Authorization:"Bearer "+token,"X-GitHub-Api-Version":"2022-11-28",...(o.body?{"Content-Type":"application/json"}:{}),...o.headers}});if(!r.ok){const e=await r.json().catch(()=>({}));throw new Error(e.message||("HTTP "+r.status))}return r.status===204?null:r.json()}
 const enc=s=>btoa(unescape(encodeURIComponent(s))),dec=s=>decodeURIComponent(escape(atob(s)));
 async function load(p){const i=await gh(`/repos/${O}/${R}/contents/${p}?ref=${B}`);return{json:JSON.parse(dec(i.content.replace(/\n/g,""))),sha:i.sha}}
 async function save(p,j,sha,msg){return gh(`/repos/${O}/${R}/contents/${p}`,{method:"PUT",body:JSON.stringify({message:msg,content:enc(JSON.stringify(j,null,2)+"\n"),sha,branch:B})})}
-async function login(){const err=$("#loginError");token=$("#tokenInput").value.trim();err.hidden=1;if(!token){err.textContent="توکن را وارد کنید";err.hidden=0;return}$("#loginBtn").disabled=1;try{await gh(`/repos/${O}/${R}`);if($("#rememberToken").checked)sessionStorage.setItem(K,token);else sessionStorage.removeItem(K);await boot()}catch(e){err.textContent="توکن نامعتبر: "+e.message;err.hidden=0}finally{$("#loginBtn").disabled=0}}
-function logout(){token="";sessionStorage.removeItem(K);$("#app").hidden=1;$("#loginScreen").hidden=0}
-async function boot(){$("#loginScreen").hidden=1;$("#app").hidden=0;$("#content").innerHTML="<div class='empty'><p>بارگذاری…</p></div>";try{const ks=Object.keys(F);const rs=await Promise.all(ks.map(k=>load(F[k])));ks.forEach((k,i)=>{data[k]=rs[i].json;shas[k]=rs[i].sha});dirty.clear();mark();render();toast("بارگذاری شد")}catch(e){$("#content").innerHTML=`<div class='empty'><p>${e.message}</p></div>`;toast(e.message,1)}}
+function showLogin(){$("#loginScreen").hidden=false;$("#app").hidden=true}
+function showApp(){$("#loginScreen").hidden=true;$("#app").hidden=false}
+async function login(){const err=$("#loginError");token=$("#tokenInput").value.trim().replace(/^Bearer\s+/i,"");err.hidden=true;if(!token){err.textContent="توکن را وارد کنید (نه اسم توکن؛ خود رشته‌ی github_pat_…)";err.hidden=false;return}if(token.length<20){err.textContent="این شبیه توکن نیست. از GitHub Settings → Tokens مقدار توکن را کپی کنید.";err.hidden=false;return}$("#loginBtn").disabled=true;try{await gh(`/repos/${O}/${R}`);if($("#rememberToken").checked)sessionStorage.setItem(K,token);else sessionStorage.removeItem(K);await boot()}catch(e){const msg=String(e.message||e);let help="توکن نامعتبر یا بدون دسترسی.";if(/Bad credentials|401/i.test(msg))help="توکن اشتباه است یا منقضی شده. دوباره بساز.";else if(/Not Found|404/i.test(msg))help="دسترسی Contents روی ریپوی khanepaz را Read and write بگذار.";else if(/rate limit/i.test(msg))help="محدودیت API گیت‌هاب؛ کمی صبر کن.";err.textContent=help+" ("+msg+")";err.hidden=false;token=""}finally{$("#loginBtn").disabled=false}}
+function logout(){token="";sessionStorage.removeItem(K);data={};shas={};dirty.clear();showLogin();$("#tokenInput").value=""}
+async function boot(){showApp();$("#content").innerHTML="<div class='empty'><p>بارگذاری…</p></div>";try{const ks=Object.keys(F);const rs=await Promise.all(ks.map(k=>load(F[k])));ks.forEach((k,i)=>{data[k]=rs[i].json;shas[k]=rs[i].sha});dirty.clear();mark();render();toast("بارگذاری شد")}catch(e){$("#content").innerHTML=`<div class='empty'><p>${e.message}</p></div>`;toast(e.message,1)}}
 async function saveAll(){if(!dirty.size)return;const b=$("#saveAllBtn");b.disabled=1;b.textContent="…";try{for(const k of[...dirty]){const r=await save(F[k],data[k],shas[k],"admin: "+k);shas[k]=r.content.sha;dirty.delete(k)}mark();toast("ذخیره شد ✓");render()}catch(e){toast(e.message,1)}finally{b.disabled=0;b.textContent="ذخیره تغییرات"}}
 const T={dashboard:"داشبورد",recipes:"دستورها",categories:"دسته‌بندی‌ها",carousel:"کاروسل",tutorials:"آموزش‌ها",gallery:"گالری",comments:"نظرات",site:"تنظیمات سایت"};
 function setTab(t){tab=t;$$("#sbNav button").forEach(b=>b.classList.toggle("active",b.dataset.tab===t));$("#pageTitle").textContent=T[t]||t;render()}
-const esc=s=>String(s??"")
-  .replace(/&/g,"&amp;")
-  .replace(/</g,"&lt;")
-  .replace(/>/g,"&gt;")
-  .replace(/"/g,"&quot;");
+const esc=s=>String(s??"").replace(/&/g,"&").replace(/</g,"<").replace(/>/g,">").replace(/"/g,""");
 function openModal(h){$("#modalBox").innerHTML=h;$("#modal").hidden=0;$$("[data-close]").forEach(e=>e.onclick=()=>{$("#modal").hidden=1})}
 function render(){const c=$("#content");
 if(tab==="dashboard"){const s=[["دستور",data.recipes?.length||0],["دسته",data.categories?.length||0],["آموزش",data.tutorials?.length||0],["گالری",data.gallery?.length||0],["نظر",data.comments?.length||0],["کاروسل",data.site?.carousel?.length||0]];c.innerHTML=`<div class="stats">${s.map(([l,n])=>`<div class="stat"><b>${n}</b><span>${l}</span></div>`).join("")}</div><div class="card"><p style="color:var(--muted)">بعد از ویرایش، دکمه ذخیره تغییرات را بزنید.</p></div>`}
@@ -44,13 +42,15 @@ $$("[data-d]").forEach(b=>b.onclick=()=>{if(confirm("حذف؟")){data.categories
 else if(tab==="comments"){const L=data.comments||[];c.innerHTML=`<div class="card"><h3>${L.length} نظر</h3><table><thead><tr><th>نام</th><th>متن</th><th></th></tr></thead><tbody>${L.map((x,i)=>`<tr><td>${esc(x.name)}</td><td>${esc(x.text)}</td><td><button class="btn btn-danger btn-sm" data-d="${i}">حذف</button></td></tr>`).join("")}</tbody></table></div>`;$$("[data-d]").forEach(b=>b.onclick=()=>{data.comments.splice(+b.dataset.d,1);mark("comments");render()})}
 else if(tab==="site"){const s=data.site||{};c.innerHTML=`<div class="card"><div class="form-grid">
 <label class="field"><span>نام</span><input id="n" value="${esc(s.name||"")}"></label>
+<label class="field"><span>دامنه</span><input id="dom" value="${esc(s.domain||"")}" dir="ltr"></label>
 <label class="field full"><span>عنوان هیرو</span><input id="ht" value="${esc(s.heroTitle||"")}"></label>
 <label class="field full"><span>متن هیرو</span><textarea id="hl" rows="3">${esc(s.heroLead||"")}</textarea></label>
 </div><button class="btn btn-primary" id="sv" style="margin-top:1rem;max-width:180px">اعمال</button></div>`;
-$("#sv").onclick=()=>{data.site={...data.site,name:$("#n").value.trim(),heroTitle:$("#ht").value.trim(),heroLead:$("#hl").value.trim()};mark("site");toast("اعمال شد")}}
+$("#sv").onclick=()=>{data.site={...data.site,name:$("#n").value.trim(),domain:$("#dom").value.trim(),heroTitle:$("#ht").value.trim(),heroLead:$("#hl").value.trim()};mark("site");toast("اعمال شد")}}
 else{c.innerHTML=`<div class="card"><p style="color:var(--muted)">این بخش در نسخه بعدی کامل می‌شود. فعلاً از دستورها، دسته‌ها، نظرات و تنظیمات استفاده کنید.</p></div>`}
 }
 $("#loginBtn").onclick=login;$("#tokenInput").onkeydown=e=>{if(e.key==="Enter")login()};$("#logoutBtn").onclick=logout;$("#saveAllBtn").onclick=saveAll;
 $$("#sbNav button").forEach(b=>b.onclick=()=>setTab(b.dataset.tab));
+showLogin();
 const sv=sessionStorage.getItem(K);if(sv){token=sv;$("#tokenInput").value=sv;$("#rememberToken").checked=1;boot()}
 })();
