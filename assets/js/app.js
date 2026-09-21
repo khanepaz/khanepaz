@@ -17,7 +17,7 @@
     const d = new Date(iso);
     return isNaN(d) ? '' : d.toLocaleDateString('fa-IR', { year: 'numeric', month: 'long', day: 'numeric' });
   };
-  const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&', '<': '<', '>': '>', '"': '"', "'": '&#39;' }[c]));
+  const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&'+'amp;', '<': '&'+'lt;', '>': '&'+'gt;', '"': '&'+'quot;', "'": '&#39;' }[c]));
   const norm = s => String(s || '')
     .replace(/[يى]/g, 'ی').replace(/ك/g, 'ک')
     .replace(/[\u064B-\u065F\u0640]/g, '')
