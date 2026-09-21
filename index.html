@@ -49,6 +49,8 @@
         <rect x="30" y="16" width="7" height="10" rx="1.5" fill="currentColor" opacity=".85"/>
         <path d="M6 25 24 9l18 16" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/>
         <path d="M11 24v16a2 2 0 0 0 2 2h22a2 2 0 0 0 2-2V24L24 13z" fill="var(--honey)"/>
+        <circle cx="24" cy="30" r="6.4" fill="var(--rose)"/>
+        <path d="M24 27.2v5.6M21.2 30h5.6" stroke="#fff" stroke-width="1.6" stroke-linecap="round"/>
       </svg>
       <span class="logo-text">خانه‌پز</span>
     </a>
@@ -84,6 +86,301 @@
   </div>
 </header>
 
-<!-- REST OF FILE - truncated intentionally to avoid size; will fix properly -->
+<!-- ====================== Sidebar ====================== -->
+<div class="scrim" id="scrim"></div>
+<aside class="sidebar" id="sidebar" aria-label="منوی کناری" aria-hidden="true">
+  <div class="sb-head">
+    <span class="logo-text">خانه‌پز</span>
+    <button class="icon-btn" id="closeSidebar" aria-label="بستن منو">
+      <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg>
+    </button>
+  </div>
+  <p class="sb-note">حدود صد سال پیش، پدربزرگ ما شیرینی را در خانه می‌پخت.</p>
+  <h3 class="sb-title">دسته‌بندی‌ها</h3>
+  <ul class="sb-list" id="sbCats"></ul>
+  <h3 class="sb-title">بخش‌ها</h3>
+  <ul class="sb-list sb-links">
+    <li><a href="#featured">ویژه‌ها</a></li>
+    <li><a href="#tutorials">آموزش</a></li>
+    <li><a href="#gallery">تصاویر</a></li>
+    <li><a href="#latest">آخرین‌ها</a></li>
+    <li><a href="#best">بهترین‌ها</a></li>
+    <li><a href="#comments">نظرات</a></li>
+  </ul>
+  <div class="sb-foot" id="sbFoot"></div>
+</aside>
+
+<!-- ====================== Search overlay ====================== -->
+<div class="search-layer" id="searchLayer" aria-hidden="true">
+  <div class="search-box" role="dialog" aria-label="جستجو">
+    <div class="search-row">
+      <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+      <input id="searchInput" type="search" placeholder="مثلاً باقلوا، زعفران، کیک…" autocomplete="off" aria-label="عبارت جستجو">
+      <button class="icon-btn" id="closeSearch" aria-label="بستن جستجو">
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg>
+      </button>
+    </div>
+    <div class="search-results" id="searchResults"></div>
+  </div>
+</div>
+
+<main id="main">
+
+<!-- ====================== Hero ====================== -->
+<section class="hero" id="home">
+  <div class="aroma" id="aroma" aria-hidden="true"></div>
+  <div class="wrap hero-grid">
+    <div class="hero-text">
+      <p class="since">از حدود صد سال پیش، در آشپزخانه‌ی یک خانه</p>
+      <h1 id="heroTitle">بوی شیرینی که از خانه می‌آید</h1>
+      <p class="lead" id="heroLead"></p>
+      <form class="hero-search" id="heroSearch" role="search">
+        <input type="search" id="heroInput" placeholder="امروز چه می‌پزیم؟" aria-label="جستجوی دستور">
+        <button type="submit" class="btn btn-green">پیدا کن</button>
+      </form>
+      <div class="hero-tags" id="heroTags"></div>
+      <p class="hero-count" id="stats"></p>
+    </div>
+
+    <div class="hero-art" aria-hidden="true">
+      <svg viewBox="0 0 460 420" role="img">
+        <defs>
+          <linearGradient id="steamG" x1="0" y1="1" x2="0" y2="0">
+            <stop offset="0" stop-color="#fff" stop-opacity=".95"/>
+            <stop offset="1" stop-color="#fff" stop-opacity="0"/>
+          </linearGradient>
+          <linearGradient id="goldG" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="#fbd766"/>
+            <stop offset="1" stop-color="#e0981a"/>
+          </linearGradient>
+          <radialGradient id="plateG" cx=".5" cy=".4" r=".7">
+            <stop offset="0" stop-color="#fffdfa"/>
+            <stop offset="1" stop-color="#f3dccb"/>
+          </radialGradient>
+          <linearGradient id="steamT" x1="0" y1="1" x2="0" y2="0">
+            <stop offset="0" stop-color="#d9805f" stop-opacity=".5"/>
+            <stop offset="1" stop-color="#d9805f" stop-opacity="0"/>
+          </linearGradient>
+          <filter id="blur3"><feGaussianBlur stdDeviation="3"/></filter>
+          <filter id="blur8"><feGaussianBlur stdDeviation="8"/></filter>
+          <g id="pc">
+            <polygon points="0,-26 42,0 0,26 -42,0" transform="translate(0 9)" fill="#a2540f"/>
+            <polygon points="0,-26 42,0 0,26 -42,0" fill="url(#goldG)" stroke="#b96b0d" stroke-width="1.4" stroke-linejoin="round"/>
+            <polygon points="0,-15 24,0 0,15 -24,0" fill="none" stroke="#fff4c4" stroke-opacity=".75" stroke-width="1.4"/>
+            <circle r="4.6" fill="#8fb85a"/>
+            <circle cx="-1.4" cy="-1.5" r="1.4" fill="#d3e8a6"/>
+          </g>
+        </defs>
+
+        <ellipse cx="230" cy="362" rx="190" ry="18" fill="#5c2a1c" opacity=".18" filter="url(#blur8)"/>
+        <ellipse cx="230" cy="318" rx="204" ry="66" fill="url(#plateG)" stroke="#e8c9b6"/>
+        <ellipse cx="230" cy="314" rx="170" ry="50" fill="#fffaf4" stroke="#f0d8c6"/>
+
+        <g>
+          <use href="#pc" x="146" y="266"/><use href="#pc" x="230" y="266"/><use href="#pc" x="314" y="266"/>
+          <use href="#pc" x="188" y="292"/><use href="#pc" x="272" y="292"/>
+          <use href="#pc" x="146" y="318"/><use href="#pc" x="230" y="318"/><use href="#pc" x="314" y="318"/>
+        </g>
+
+        <g>
+          <ellipse cx="66" cy="336" rx="14" ry="7" transform="rotate(-28 66 336)" fill="#e5768f"/>
+          <ellipse cx="86" cy="352" rx="11" ry="6" transform="rotate(14 86 352)" fill="#f19bb2"/>
+          <ellipse cx="404" cy="344" rx="13" ry="6.5" transform="rotate(24 404 344)" fill="#e5768f"/>
+          <rect x="356" y="338" width="78" height="11" rx="5.5" transform="rotate(-10 356 338)" fill="#8a4a25"/>
+          <rect x="360" y="341" width="70" height="3" rx="1.5" transform="rotate(-10 360 341)" fill="#b56b3a"/>
+          <ellipse cx="112" cy="356" rx="9" ry="5" transform="rotate(-18 112 356)" fill="#9ec66a"/>
+          <ellipse cx="128" cy="360" rx="8" ry="4.5" transform="rotate(10 128 360)" fill="#84b04f"/>
+        </g>
+
+        <g class="steam" fill="none" stroke="url(#steamT)" stroke-width="20" stroke-linecap="round" filter="url(#blur8)">
+          <path d="M168 236 C146 202 190 182 170 148 C156 122 186 104 172 72"/>
+          <path d="M230 232 C208 194 252 172 232 134 C218 106 250 84 234 46"/>
+          <path d="M292 236 C270 204 314 184 294 152 C282 128 306 110 296 78"/>
+        </g>
+        <g class="steam" fill="none" stroke="url(#steamG)" stroke-width="12" stroke-linecap="round" filter="url(#blur3)">
+          <path d="M168 236 C146 202 190 182 170 148 C156 122 186 104 172 72"/>
+          <path d="M230 232 C208 194 252 172 232 134 C218 106 250 84 234 46"/>
+          <path d="M292 236 C270 204 314 184 294 152 C282 128 306 110 296 78"/>
+        </g>
+      </svg>
+    </div>
+  </div>
+
+  <svg class="wave" viewBox="0 0 1440 90" preserveAspectRatio="none" aria-hidden="true"><path d="M0 50c120 40 240 40 360 10s240-50 360-30 240 60 360 50 240-40 360-20V90H0z"/></svg>
+</section>
+
+<!-- ====================== Carousel ====================== -->
+<section class="section sec-carousel" id="carousel" aria-label="پیشنهادهای امروز">
+  <div class="wrap">
+    <div class="carousel" id="carouselEl" aria-roledescription="carousel"></div>
+  </div>
+</section>
+
+<!-- ====================== Categories ====================== -->
+<section class="section" id="categories">
+  <div class="wrap">
+    <div class="sec-head">
+      <h2>دسته‌بندی‌ها</h2>
+      <p>از شیرینی‌های قزوینی تا مربا و نوشیدنی؛ یکی را باز کنید.</p>
+    </div>
+    <div class="cat-grid" id="catGrid"></div>
+  </div>
+</section>
+
+<!-- ====================== Featured ====================== -->
+<section class="section band" id="featured">
+  <div class="wrap">
+    <div class="sec-head">
+      <h2>ویژه‌ها</h2>
+      <p>دستورهایی که بیشتر از همه امتحان شده‌اند.</p>
+    </div>
+    <div class="grid" id="featuredGrid"></div>
+  </div>
+</section>
+
+<!-- ====================== Browse ====================== -->
+<section class="section" id="browse">
+  <div class="wrap">
+    <div class="sec-head">
+      <h2>همه‌ی دستورها</h2>
+      <p id="browseInfo">همه‌ی دستورها را ببینید یا با دسته‌بندی محدود کنید.</p>
+    </div>
+    <div class="chips" id="chips" role="tablist" aria-label="فیلتر دسته‌بندی"></div>
+    <div class="grid" id="browseGrid"></div>
+    <div class="center"><button class="btn btn-ghost" id="moreBtn" hidden>نمایش بیشتر</button></div>
+  </div>
+</section>
+
+<!-- ====================== Tutorials ====================== -->
+<section class="section band-green" id="tutorials">
+  <div class="wrap">
+    <div class="sec-head light">
+      <h2>آموزش</h2>
+      <p>چند نکته‌ی کوچک که نتیجه‌ی پخت را عوض می‌کنند.</p>
+    </div>
+    <div class="tut-grid" id="tutGrid"></div>
+  </div>
+</section>
+
+<!-- ====================== Gallery ====================== -->
+<section class="section" id="gallery">
+  <div class="wrap">
+    <div class="sec-head">
+      <h2>تصاویر</h2>
+      <p>گوشه‌هایی از آشپزخانه‌ی خانه‌پز.</p>
+    </div>
+    <div class="gallery" id="galleryGrid"></div>
+  </div>
+</section>
+
+<!-- ====================== Latest ====================== -->
+<section class="section band" id="latest">
+  <div class="wrap">
+    <div class="sec-head">
+      <h2>آخرین‌ها</h2>
+      <p>تازه‌ترین دستورهایی که اضافه شده‌اند.</p>
+    </div>
+  </div>
+  <div class="hscroll" id="latestRow" tabindex="0" aria-label="آخرین دستورها"></div>
+</section>
+
+<!-- ====================== Best ====================== -->
+<section class="section" id="best">
+  <div class="wrap">
+    <div class="sec-head">
+      <h2>بهترین‌ها</h2>
+      <p>بر اساس امتیاز کاربران.</p>
+    </div>
+    <ol class="best-list" id="bestList"></ol>
+  </div>
+</section>
+
+<!-- ====================== Story ====================== -->
+<section class="story" id="story">
+  <div class="story-steam" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+  <div class="wrap story-in">
+    <div class="story-num" aria-hidden="true"><b id="storyYears">۱۰۰</b><span>سال</span></div>
+    <div class="story-text" id="storyText"></div>
+  </div>
+</section>
+
+<!-- ====================== Comments ====================== -->
+<section class="section" id="comments">
+  <div class="wrap">
+    <div class="sec-head">
+      <h2>نظرات</h2>
+      <p>تجربه‌ی شما از پخت دستورها.</p>
+    </div>
+    <div class="cm-layout">
+      <div class="cm-list" id="cmList"></div>
+      <form class="cm-form" id="cmForm" autocomplete="off">
+        <h3>نظر خودتان را بنویسید</h3>
+        <label>نام
+          <input name="name" required maxlength="40" placeholder="مثلاً مریم">
+        </label>
+        <label>دستور
+          <select name="recipeId" id="cmRecipe"><option value="">کلی</option></select>
+        </label>
+        <fieldset class="rate-pick">
+          <legend>امتیاز</legend>
+          <div class="rate-stars" id="rateStars" role="radiogroup" aria-label="امتیاز از ۵"></div>
+        </fieldset>
+        <label>متن نظر
+          <textarea name="text" required rows="4" maxlength="500" placeholder="چه پختید و چطور شد؟"></textarea>
+        </label>
+        <button class="btn btn-green" type="submit">ثبت نظر</button>
+        <p class="hint" id="cmHint"></p>
+      </form>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<!-- ====================== Footer ====================== -->
+<footer class="footer">
+  <div class="wrap foot-grid">
+    <div>
+      <span class="logo-text">خانه‌پز</span>
+      <p class="foot-desc" id="footDesc"></p>
+      <p class="domain" dir="ltr">khanepaz.ir</p>
+    </div>
+    <div>
+      <h4>دسته‌بندی‌ها</h4>
+      <ul id="footCats"></ul>
+    </div>
+    <div>
+      <h4>بخش‌ها</h4>
+      <ul>
+        <li><a href="#featured">ویژه‌ها</a></li>
+        <li><a href="#tutorials">آموزش</a></li>
+        <li><a href="#gallery">تصاویر</a></li>
+        <li><a href="#best">بهترین‌ها</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4>ارتباط</h4>
+      <ul id="footContact"></ul>
+    </div>
+  </div>
+  <div class="wrap foot-bottom">
+    <span id="footNote"></span>
+    <button class="to-top" id="toTop" aria-label="بازگشت به بالا">↑ بالا</button>
+  </div>
+</footer>
+
+<!-- ====================== Modal ====================== -->
+<div class="modal" id="modal" aria-hidden="true">
+  <div class="modal-scrim" data-close></div>
+  <div class="modal-panel" role="dialog" aria-modal="true" id="modalPanel" tabindex="-1"></div>
+</div>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<noscript><p style="padding:2rem;text-align:center">برای مشاهده‌ی سایت، جاوااسکریپت را فعال کنید.</p></noscript>
+
+<script src="assets/js/config.js"></script>
+<script src="assets/js/api.js"></script>
+<script src="assets/js/app.js"></script>
 </body>
 </html>
