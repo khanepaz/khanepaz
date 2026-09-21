@@ -1,0 +1,101 @@
+[
+  {
+    "id": "g1",
+    "caption": "سینی باقلوا، تازه از فر",
+    "ratio": "4/5",
+    "recipeId": "baghlava-qazvini",
+    "art": {
+      "emoji": "🍯",
+      "from": "#f2b632",
+      "to": "#a8560f"
+    }
+  },
+  {
+    "id": "g2",
+    "caption": "گلاب و زعفران",
+    "ratio": "1/1",
+    "recipeId": "",
+    "art": {
+      "emoji": "🌹",
+      "from": "#f19bb2",
+      "to": "#a63158"
+    }
+  },
+  {
+    "id": "g3",
+    "caption": "نان برنجی با خشخاش",
+    "ratio": "3/2",
+    "recipeId": "nan-berenji",
+    "art": {
+      "emoji": "🍪",
+      "from": "#f4d9a0",
+      "to": "#b9803a"
+    }
+  },
+  {
+    "id": "g4",
+    "caption": "چای عصرانه و کیک",
+    "ratio": "4/5",
+    "recipeId": "kake-yazdi",
+    "art": {
+      "emoji": "☕",
+      "from": "#c99a6b",
+      "to": "#5b3520"
+    }
+  },
+  {
+    "id": "g5",
+    "caption": "هل و دارچین",
+    "ratio": "4/5",
+    "recipeId": "",
+    "art": {
+      "emoji": "🌿",
+      "from": "#9cc270",
+      "to": "#2f6a3a"
+    }
+  },
+  {
+    "id": "g6",
+    "caption": "شربت تابستانه",
+    "ratio": "3/2",
+    "recipeId": "sharbat-albalu",
+    "art": {
+      "emoji": "🍒",
+      "from": "#e0546c",
+      "to": "#8f1f3d"
+    }
+  },
+  {
+    "id": "g7",
+    "caption": "خمیر ورآمده",
+    "ratio": "1/1",
+    "recipeId": "",
+    "art": {
+      "emoji": "🥖",
+      "from": "#f5dcaa",
+      "to": "#c08a3e"
+    }
+  },
+  {
+    "id": "g8",
+    "caption": "حلوای زعفرانی",
+    "ratio": "3/2",
+    "recipeId": "halva-zaferani",
+    "art": {
+      "emoji": "🍮",
+      "from": "#f0b429",
+      "to": "#9a5a08"
+    }
+  },
+  {
+    "id": "g9",
+    "caption": "سفره‌ی خانگی",
+    "ratio": "1/1",
+    "recipeId": "gheymeh-nesar",
+    "art": {
+      "emoji": "🍽️",
+      "from": "#e8a23a",
+      "to": "#7a2f18"
+    }
+  }
+]
