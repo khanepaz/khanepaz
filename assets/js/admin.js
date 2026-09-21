@@ -15,7 +15,11 @@ async function boot(){$("#loginScreen").hidden=1;$("#app").hidden=0;$("#content"
 async function saveAll(){if(!dirty.size)return;const b=$("#saveAllBtn");b.disabled=1;b.textContent="…";try{for(const k of[...dirty]){const r=await save(F[k],data[k],shas[k],"admin: "+k);shas[k]=r.content.sha;dirty.delete(k)}mark();toast("ذخیره شد ✓");render()}catch(e){toast(e.message,1)}finally{b.disabled=0;b.textContent="ذخیره تغییرات"}}
 const T={dashboard:"داشبورد",recipes:"دستورها",categories:"دسته‌بندی‌ها",carousel:"کاروسل",tutorials:"آموزش‌ها",gallery:"گالری",comments:"نظرات",site:"تنظیمات سایت"};
 function setTab(t){tab=t;$$("#sbNav button").forEach(b=>b.classList.toggle("active",b.dataset.tab===t));$("#pageTitle").textContent=T[t]||t;render()}
-const esc=s=>String(s??"").replace(/&/g,"&").replace(/</g,"<").replace(/>/g,">").replace(/"/g,""");
+const esc=s=>String(s??"")
+  .replace(/&/g,"&amp;")
+  .replace(/</g,"&lt;")
+  .replace(/>/g,"&gt;")
+  .replace(/"/g,"&quot;");
 function openModal(h){$("#modalBox").innerHTML=h;$("#modal").hidden=0;$$("[data-close]").forEach(e=>e.onclick=()=>{$("#modal").hidden=1})}
 function render(){const c=$("#content");
 if(tab==="dashboard"){const s=[["دستور",data.recipes?.length||0],["دسته",data.categories?.length||0],["آموزش",data.tutorials?.length||0],["گالری",data.gallery?.length||0],["نظر",data.comments?.length||0],["کاروسل",data.site?.carousel?.length||0]];c.innerHTML=`<div class="stats">${s.map(([l,n])=>`<div class="stat"><b>${n}</b><span>${l}</span></div>`).join("")}</div><div class="card"><p style="color:var(--muted)">بعد از ویرایش، دکمه ذخیره تغییرات را بزنید.</p></div>`}
