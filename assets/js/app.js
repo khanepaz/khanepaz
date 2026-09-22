@@ -361,6 +361,7 @@
 
   function openSearch(q = '') {
     closeSidebar(); closeDD();
+    searchLayer.inert = false;
     searchLayer.classList.add('open');
     searchLayer.setAttribute('aria-hidden', 'false');
     searchInput.value = q;
@@ -371,6 +372,7 @@
   function closeSearch() {
     searchLayer.classList.remove('open');
     searchLayer.setAttribute('aria-hidden', 'true');
+    searchLayer.inert = true;
     lockScroll();
   }
   function doSearch(q) {
@@ -400,6 +402,7 @@
   function closeSidebar() {
     sidebar.classList.remove('open');
     sidebar.setAttribute('aria-hidden', 'true');
+    sidebar.inert = true;
     $('#scrim').classList.remove('open');
     lockScroll();
   }
@@ -432,10 +435,16 @@
     });
 
     $('#openSidebar')?.addEventListener('click', () => {
+      sidebar.inert = false;
       sidebar.classList.add('open');
       sidebar.setAttribute('aria-hidden', 'false');
       $('#scrim').classList.add('open');
       lockScroll();
+    });
+    // لینک‌های بخش داخل سایدبار: بستن منو بعد از کلیک
+    sidebar.addEventListener('click', e => {
+      const a = e.target.closest('a[href^="#"]');
+      if (a) closeSidebar();
     });
     $('#closeSidebar')?.addEventListener('click', closeSidebar);
     $('#scrim')?.addEventListener('click', closeSidebar);
