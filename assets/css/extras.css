@@ -79,3 +79,17 @@
 @media (max-width: 600px) {
   .m-head-photo { width: 28%; inset-inline-start: 4%; }
 }
+
+.hero-art .hero-photo {
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 28px;
+  object-fit: cover;
+  aspect-ratio: 460 / 420;
+  filter: drop-shadow(0 20px 20px rgba(90, 40, 30, .12));
+  animation: plateIn 1.2s var(--ease) .2s both;
+}
+@media (max-width: 860px) {
+  .hero-art .hero-photo { border-radius: 22px; }
+}
