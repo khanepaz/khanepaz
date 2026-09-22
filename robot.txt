@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://khanehpaz.ir/sitemap.xml
