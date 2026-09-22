@@ -192,17 +192,56 @@
     });
   }
 
-  function renderFooter() {
-    $('#footDesc').textContent = S.site.description;
-    $('#footCats').innerHTML = S.categories.map(c => `<li><button data-cat="${c.slug}">${esc(c.name)}</button></li>`).join('');
-    const so = S.site.social || {};
-    $('#footContact').innerHTML = [
-      so.email && `<li><a href="mailto:${esc(so.email)}">ایمیل</a></li>`,
-      so.instagram && `<li><a href="${esc(so.instagram)}" target="_blank" rel="noopener noreferrer">اینستاگرام</a></li>`,
-      so.telegram && `<li><a href="${esc(so.telegram)}" target="_blank" rel="noopener noreferrer">تلگرام</a></li>`
-    ].filter(Boolean).join('');
-    $('#footNote').textContent = `${S.site.footerNote || ''}`;
-  }
+
+function renderFooter() {
+  $('#footDesc').textContent = S.site.description;
+
+  $('#footCats').innerHTML = S.categories
+    .map(c => `<li><button data-cat="${c.slug}">${esc(c.name)}</button></li>`)
+    .join('');
+
+  const so = S.site.social || {};
+
+  $('#footContact').innerHTML = [
+    so.email && `
+      <li>
+        <a href="mailto:${esc(so.email)}">
+          ایمیل
+        </a>
+      </li>
+    `,
+
+    so.instagram && `
+      <li>
+        <a href="${esc(so.instagram)}" target="_blank" rel="noopener noreferrer">
+          اینستاگرام
+        </a>
+      </li>
+    `,
+
+    so.telegram && `
+      <li>
+        <a href="${esc(so.telegram)}" target="_blank" rel="noopener noreferrer">
+          تلگرام
+        </a>
+      </li>
+    `,
+
+    so.bale && `
+      <li>
+        <a href="${esc(so.bale)}" target="_blank" rel="noopener noreferrer">
+          پیام‌رسان بله
+        </a>
+      </li>
+    `
+  ]
+    .filter(Boolean)
+    .join('');
+
+  $('#footNote').textContent = S.site.footerNote || '';
+}
+
+
 
   function initCarousel() {
     const el = $('#carouselEl');
