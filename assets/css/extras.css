@@ -75,26 +75,29 @@
 }
 .m-head .art { position: relative; z-index: 0; }
 
-/* عکس دستور در مدال: پر کردن کل m-head + انیمیشن ورود */
-.m-head .art.m-photo {
+/* عکس دستور در مدال: جای ایموجی SVG + همان انیمیشن bob */
+.m-head .art-photo {
   position: absolute;
-  inset: 0;
-  z-index: 0;
-  aspect-ratio: auto;
-  height: 100%;
-  width: 100%;
-  background: transparent;
-}
-.m-head .art.m-photo::before { display: none; }
-.m-head .art.m-photo > img {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
+  inset-inline-end: 6%;
+  top: 50%;
+  transform: translateY(-50%);
+  width: min(38%, 160px);
+  aspect-ratio: 1;
   object-fit: cover;
-  z-index: 0;
-  animation: plateIn .9s var(--ease) both;
+  border-radius: 22px;
+  box-shadow: 0 12px 28px rgba(0, 0, 0, .35);
+  border: 3px solid rgba(255, 250, 246, .92);
+  z-index: 1;
+  animation: bob 4.5s ease-in-out infinite;
+  filter: drop-shadow(0 10px 10px rgba(0, 0, 0, .25));
 }
+@media (max-width: 700px) {
+  .m-head .art-photo {
+    width: min(36%, 120px);
+    inset-inline-end: 5%;
+  }
+}
+
 .m-head::after { z-index: 1; }
 .m-title { position: relative; z-index: 2; }
 
