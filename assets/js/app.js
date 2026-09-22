@@ -35,9 +35,9 @@
   const recipeBy = id => S.recipes.find(r => r.id === id);
   const countIn = slug => S.recipes.filter(r => r.category === slug).length;
 
-  function art(item, cls = '', extra = '') {
+  function art(item, cls = '', extra = '', eager = false) {
     if (item.image) {
-      return `<div class="art ${cls}" style="${extra}"><img src="${esc(item.image)}" alt="${esc(item.title || item.caption || '')}" loading="lazy"></div>`;
+      return `<div class="art ${cls}" style="${extra}"><img src="${esc(item.image)}" alt="${esc(item.title || item.caption || '')}" loading="${eager ? 'eager' : 'lazy'}"></div>`;
     }
     const a = item.art || {};
     return `<div class="art ${cls}" style="--a:${esc(a.from || '#f4c26b')};--b:${esc(a.to || '#c9743a')};${extra}">
@@ -303,7 +303,7 @@
     history.replaceState(null, '', '#recipe=' + r.id);
     openModal(`
       ${CLOSE_BTN}
-      <div class="m-head">${art(r)}
+      <div class="m-head">${art(r, 'm-photo', '', true)}
         <div class="m-title">
           <h2>${esc(r.title)}</h2>
           <div class="m-chips">
@@ -441,7 +441,6 @@
       $('#scrim').classList.add('open');
       lockScroll();
     });
-    // لینک‌های بخش داخل سایدبار: بستن منو بعد از کلیک
     sidebar.addEventListener('click', e => {
       const a = e.target.closest('a[href^="#"]');
       if (a) closeSidebar();
