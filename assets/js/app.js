@@ -202,8 +202,15 @@
     el.innerHTML = items.map((s, i) => {
       const a = s.r.art || {};
       const photo = s.image || s.r.image || '';
-      const visual = `<span class="big" aria-hidden="true">${a.emoji || '🍰'}</span><i class="wisp w1"></i><i class="wisp w2"></i><i class="wisp w3"></i>` +
-        (photo ? `<img class="slide-photo" src="${esc(photo)}" alt="${esc(s.title || s.r.title)}" loading="lazy">` : '');
+      const emoji = a.emoji || '🍰';
+      let visual;
+      if (photo) {
+        visual = `<img class="slide-photo" src="${esc(photo)}" alt="${esc(s.title || s.r.title)}" loading="lazy">
+          <span class="big corner" aria-hidden="true">${emoji}</span>
+          <i class="wisp w1"></i><i class="wisp w2"></i><i class="wisp w3"></i>`;
+      } else {
+        visual = `<span class="big" aria-hidden="true">${emoji}</span><i class="wisp w1"></i><i class="wisp w2"></i><i class="wisp w3"></i>`;
+      }
       return `<div class="slide ${i === 0 ? 'on' : ''}" style="--a:${esc(a.from || '#f4c26b')};--b:${esc(a.to || '#a8560f')}" role="group" aria-roledescription="اسلاید" aria-label="${fa(i + 1)} از ${fa(items.length)}">
         <div class="slide-text">
           <span class="pill">${esc(s.badge || '')}</span>
@@ -211,7 +218,7 @@
           <p>${esc(s.text)}</p>
           <button class="btn btn-honey" data-recipe="${esc(s.r.id)}">مشاهده‌ی دستور</button>
         </div>
-        <div class="slide-art">${visual}</div>
+        <div class="slide-art${photo ? ' has-photo' : ''}">${visual}</div>
       </div>`;
     }).join('') +
       `<button class="car-btn prev" aria-label="اسلاید قبلی">›</button>
