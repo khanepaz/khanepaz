@@ -182,7 +182,7 @@
     $('#rateStars').innerHTML = [1, 2, 3, 4, 5].map(n =>
       `<button type="button" data-v="${n}" role="radio" aria-label="${fa(n)} از ۵" aria-checked="false">★</button>`).join('');
     setRate(5);
-    $('#cmHint').textContent = CFG.mode === 'api' ? '' : 'فعلاً نظر شما فقط در همین مرورگر ذخیره می‌شود.';
+    $('#cmHint').textContent = 'پس از ثبت، نظر برای مدیر سایت ایمیل می‌شود.';
   }
   function setRate(n) {
     rate = n;
@@ -193,56 +193,17 @@
     });
   }
 
- 
-function renderFooter() {
-  $('#footDesc').textContent = S.site.description;
-
-  $('#footCats').innerHTML = S.categories
-    .map(c => `<li><button data-cat="${c.slug}">${esc(c.name)}</button></li>`)
-    .join('');
-
-  const so = S.site.social || {};
-
-  $('#footContact').innerHTML = [
-    so.email && `
-      <li>
-        <a href="mailto:${esc(so.email)}">
-          ایمیل
-        </a>
-      </li>
-    `,
-
-    so.instagram && `
-      <li>
-        <a href="${esc(so.instagram)}" target="_blank" rel="noopener noreferrer">
-          اینستاگرام
-        </a>
-      </li>
-    `,
-
-    so.telegram && `
-      <li>
-        <a href="${esc(so.telegram)}" target="_blank" rel="noopener noreferrer">
-          تلگرام
-        </a>
-      </li>
-    `,
-
-    so.bale && `
-      <li>
-        <a href="${esc(so.bale)}" target="_blank" rel="noopener noreferrer">
-          پیام‌رسان بله
-        </a>
-      </li>
-    `
-  ]
-    .filter(Boolean)
-    .join('');
-
-  $('#footNote').textContent = S.site.footerNote || '';
-}
-
-
+  function renderFooter() {
+    $('#footDesc').textContent = S.site.description;
+    $('#footCats').innerHTML = S.categories.map(c => `<li><button data-cat="${c.slug}">${esc(c.name)}</button></li>`).join('');
+    const so = S.site.social || {};
+    $('#footContact').innerHTML = [
+      so.email && `<li><a href="mailto:${esc(so.email)}">ایمیل</a></li>`,
+      so.instagram && `<li><a href="${esc(so.instagram)}" target="_blank" rel="noopener noreferrer">اینستاگرام</a></li>`,
+      so.telegram && `<li><a href="${esc(so.telegram)}" target="_blank" rel="noopener noreferrer">تلگرام</a></li>`
+    ].filter(Boolean).join('');
+    $('#footNote').textContent = `${S.site.footerNote || ''}`;
+  }
 
   function initCarousel() {
     const el = $('#carouselEl');
@@ -523,13 +484,23 @@ function renderFooter() {
       if (e.key === 'Escape') { closeModal(); closeSearch(); closeSidebar(); closeDD(); }
     });
     $('#toTop')?.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
-    $('#cmForm')?.addEventListener('submit', e => {
+    $('#cmForm')?.addEventListener('submit', async e => {
       e.preventDefault();
-      const fd = new FormData(e.target);
+      const form = e.target;
+      const btn = form.querySelector('[type="submit"]');
+      const fd = new FormData(form);
       const name = (fd.get('name') || '').toString().trim();
       const text = (fd.get('text') || '').toString().trim();
       if (!name || !text) return;
-      const c = { name, text, rating: rate, recipeId: fd.get('recipeId') || null, date: new Date().toISOString().slice(0, 10), local: true };
+      const recipeId = (fd.get('recipeId') || '').toString() || null;
+      const recipe = recipeId && recipeBy(recipeId);
+      const c = {
+        name, text, rating: rate, recipeId,
+        date: new Date().toISOString().slice(0, 10), local: true
+      };
+
+      if (btn) { btn.disabled = true; btn.textContent = 'در حال ارسال…'; }
+
       S.comments.unshift(c);
       try {
         const prev = JSON.parse(localStorage.getItem('kp-comments') || '[]');
@@ -537,8 +508,39 @@ function renderFooter() {
         localStorage.setItem('kp-comments', JSON.stringify(prev.slice(0, 50)));
       } catch (err) {}
       renderComments();
-      e.target.reset();
+
+      let mailed = false;
+      const to = (S.site.social && S.site.social.email) || '';
+      if (to) {
+        try {
+          const res = await fetch('https://formsubmit.co/ajax/' + encodeURIComponent(to), {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+            body: JSON.stringify({
+              name,
+              rating: rate + ' از ۵',
+              recipe: recipe ? recipe.title : 'کلی (بدون دستور مشخص)',
+              message: text,
+              _subject: 'نظر جدید در خانه‌پز — ' + name,
+              _template: 'table',
+              _captcha: 'false'
+            })
+          });
+          mailed = res.ok;
+        } catch (err) {
+          console.warn('comment mail failed', err);
+        }
+      }
+
+      form.reset();
       setRate(5);
+      if (btn) { btn.disabled = false; btn.textContent = 'ثبت نظر'; }
+      const hint = $('#cmHint');
+      if (hint) {
+        hint.textContent = mailed
+          ? 'نظر شما ثبت شد و برای مدیر سایت ارسال گردید. سپاس!'
+          : 'نظر شما در این مرورگر ثبت شد. اگر ایمیل نرسید، یک‌بار لینک فعال‌سازی FormSubmit در ایمیل مدیر را تأیید کنید.';
+      }
     });
   }
 
