@@ -221,8 +221,8 @@
         <div class="slide-art${photo ? ' has-photo' : ''}">${visual}</div>
       </div>`;
     }).join('') +
-      `<button class="car-btn prev" aria-label="اسلاید قبلی">›</button>
-       <button class="car-btn next" aria-label="اسلاید بعدی">‹</button>
+      `<button class="car-btn next" aria-label="اسلاید قبلی">›</button>
+       <button class="car-btn prev" aria-label="اسلاید بعدی">‹</button>
        <div class="dots">${items.map((_, i) => `<button aria-label="اسلاید ${fa(i + 1)}" aria-current="${i === 0}"></button>`).join('')}</div>`;
 
     const slides = $$('.slide', el), dots = $$('.dots button', el);
