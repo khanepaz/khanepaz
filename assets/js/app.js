@@ -70,7 +70,7 @@
     $('#sbCats').innerHTML = S.categories.map(c =>
       `<li><button data-cat="${c.slug}"><span>${c.icon}</span>${esc(c.name)}<span class="n">${fa(countIn(c.slug))}</span></button></li>`).join('');
     const email = S.site.social?.email;
-    $('#sbFoot').innerHTML = `khanepaz.ir${email ? `<br><a href="mailto:${esc(email)}">${esc(email)}</a>` : ''}`;
+    $('#sbFoot').innerHTML = `khanehpaz.ir${email ? `<br><a href="mailto:${esc(email)}">${esc(email)}</a>` : ''}`;
   }
 
   function renderHero() {
