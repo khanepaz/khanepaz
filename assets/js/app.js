@@ -181,7 +181,7 @@
     $('#rateStars').innerHTML = [1, 2, 3, 4, 5].map(n =>
       `<button type="button" data-v="${n}" role="radio" aria-label="${fa(n)} از ۵" aria-checked="false">★</button>`).join('');
     setRate(5);
-    $('#cmHint').textContent = 'پس از ثبت، نظر برای مدیر سایت ایمیل می‌شود.';
+    $('#cmHint').textContent = '';
   }
   function setRate(n) {
     rate = n;
@@ -239,7 +239,7 @@
     const go = n => {
       i = (n + items.length) % items.length;
       slides.forEach((s, k) => { s.classList.toggle('on', k === i); s.setAttribute('aria-hidden', String(k !== i)); });
-      dots.forEach((d, k) => d.setAttribute('aria-current', String(k === i)));
+      dots.forEach((d, k) => d.setAttribute('aria-current', String(k === i)); });
     };
     const stop = () => clearInterval(timer);
     const play = () => { stop(); if (!reduceMotion) timer = setInterval(() => go(i + 1), 6500); };
@@ -571,9 +571,7 @@
       if (btn) { btn.disabled = false; btn.textContent = 'ثبت نظر'; }
       const hint = $('#cmHint');
       if (hint) {
-        hint.textContent = to
-          ? 'نظر شما ثبت شد. اگر اولین ارسال است، لینک فعال‌سازی FormSubmit را در ایمیل خود (و پوشه هرزنامه) تأیید کنید.'
-          : 'نظر شما در این مرورگر ثبت شد.';
+        hint.textContent = 'نظر شما با موفقیت ثبت شد. سپاس از همراهی‌تان 🌸';
       }
     });
   }
