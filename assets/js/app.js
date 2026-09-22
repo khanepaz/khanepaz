@@ -239,7 +239,7 @@
     const go = n => {
       i = (n + items.length) % items.length;
       slides.forEach((s, k) => { s.classList.toggle('on', k === i); s.setAttribute('aria-hidden', String(k !== i)); });
-      dots.forEach((d, k) => d.setAttribute('aria-current', String(k === i)); });
+      dots.forEach((d, k) => d.setAttribute('aria-current', String(k === i)));
     };
     const stop = () => clearInterval(timer);
     const play = () => { stop(); if (!reduceMotion) timer = setInterval(() => go(i + 1), 6500); };
