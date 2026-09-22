@@ -66,40 +66,47 @@
 }
 .tut-photo img { width: 100%; height: 100%; object-fit: cover; display: block; }
 
-.m-head { position: relative; }
 .m-head-photo {
   position: absolute; inset-inline-start: 6%; top: 50%; transform: translateY(-55%);
   width: min(34%, 200px); aspect-ratio: 1; object-fit: cover; border-radius: 20px;
   box-shadow: 0 12px 32px rgba(0,0,0,.35); border: 3px solid rgba(255,250,246,.92); z-index: 2;
   animation: plateIn .85s var(--ease) both;
 }
-.m-head .art { position: relative; z-index: 0; }
 
-/* عکس دستور در مدال: جای ایموجی SVG + همان انیمیشن bob */
+/*
+  مهم: .m-head .art باید absolute + inset:0 بماند (از style.css).
+  هرگز position:relative نگذار — ارتفاع صفر می‌شود و ایموجی/عکس دیده نمی‌شود.
+*/
+.m-head .art-emoji {
+  z-index: 2;
+}
+
+/* عکس دستور در مدال = همان جای ایموجی + انیمیشن bob */
 .m-head .art-photo {
   position: absolute;
-  inset-inline-end: 6%;
+  inset-inline-end: 8%;
   top: 50%;
-  transform: translateY(-50%);
-  width: min(38%, 160px);
-  aspect-ratio: 1;
+  margin-top: -80px;
+  width: 160px;
+  height: 160px;
   object-fit: cover;
   border-radius: 22px;
   box-shadow: 0 12px 28px rgba(0, 0, 0, .35);
   border: 3px solid rgba(255, 250, 246, .92);
-  z-index: 1;
+  z-index: 2;
   animation: bob 4.5s ease-in-out infinite;
   filter: drop-shadow(0 10px 10px rgba(0, 0, 0, .25));
 }
 @media (max-width: 700px) {
   .m-head .art-photo {
-    width: min(36%, 120px);
+    width: 110px;
+    height: 110px;
+    margin-top: -55px;
     inset-inline-end: 5%;
   }
 }
 
-.m-head::after { z-index: 1; }
-.m-title { position: relative; z-index: 2; }
+.m-title { position: relative; z-index: 3; }
 
 @media (max-width: 600px) {
   .m-head-photo { width: 28%; inset-inline-start: 4%; }
@@ -117,4 +124,24 @@
 }
 @media (max-width: 860px) {
   .hero-art .hero-photo { border-radius: 22px; }
+}
+
+/* override .art > img full-bleed so modal art-photo keeps emoji size */
+.m-head .art > img.art-photo {
+  position: absolute;
+  inset: auto;
+  inset-inline-end: 8%;
+  top: 50%;
+  margin-top: -80px;
+  width: 160px;
+  height: 160px;
+  object-fit: cover;
+}
+@media (max-width: 700px) {
+  .m-head .art > img.art-photo {
+    width: 110px;
+    height: 110px;
+    margin-top: -55px;
+    inset-inline-end: 5%;
+  }
 }
