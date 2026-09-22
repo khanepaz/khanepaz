@@ -1,14 +1,67 @@
 /* extras: photo layouts + sticky fix */
 .ing { position: static !important; }
 
-.slide-art { position: relative; }
-.slide-art .slide-photo {
-  position: absolute; inset-inline-start: 8%; top: 50%; transform: translateY(-50%);
-  width: min(42%, 220px); aspect-ratio: 1; object-fit: cover; border-radius: 22px;
-  box-shadow: 0 16px 40px rgba(0,0,0,.35); border: 3px solid rgba(255,250,246,.9); z-index: 2;
+/* ----- Carousel: photo takes center + bob; emoji corner ----- */
+.slide-art {
+  position: relative;
+  height: 100%;
+  display: grid;
+  place-items: center;
 }
-.slide-art .big { position: relative; z-index: 1; margin-inline-start: 12%; }
+.slide-art .slide-photo {
+  position: relative;
+  z-index: 1;
+  width: min(88%, 280px);
+  aspect-ratio: 1;
+  object-fit: cover;
+  border-radius: 24px;
+  box-shadow: 0 18px 42px rgba(0, 0, 0, .4);
+  border: 3px solid rgba(255, 250, 246, .92);
+  animation: bob 5s ease-in-out infinite;
+}
+.slide-art.has-photo .big.corner {
+  position: absolute;
+  /* گوشه سمت چپ بصری در RTL */
+  inset-inline-end: 4%;
+  bottom: 12%;
+  z-index: 2;
+  font-size: clamp(2.2rem, 6vw, 3.4rem);
+  line-height: 1;
+  margin: 0;
+  filter: drop-shadow(0 8px 12px rgba(0, 0, 0, .35));
+  animation: bob 5s ease-in-out infinite;
+  animation-delay: -.8s;
+  opacity: .95;
+  pointer-events: none;
+}
+.slide-art.has-photo .wisp {
+  bottom: 48%;
+  opacity: .7;
+}
+.slide-art.has-photo .wisp.w1 { left: 28%; }
+.slide-art.has-photo .wisp.w2 { left: 48%; }
+.slide-art.has-photo .wisp.w3 { left: 68%; }
 
+/* بدون عکس: ایموجی بزرگ مثل قبل */
+.slide-art:not(.has-photo) .big {
+  font-size: clamp(6rem, 16vw, 11rem);
+  line-height: 1;
+  filter: drop-shadow(0 22px 22px rgba(0, 0, 0, .35));
+  animation: bob 5s ease-in-out infinite;
+}
+
+@media (max-width: 700px) {
+  .slide-art .slide-photo {
+    width: min(72%, 200px);
+  }
+  .slide-art.has-photo .big.corner {
+    font-size: clamp(1.8rem, 8vw, 2.6rem);
+    inset-inline-end: 6%;
+    bottom: 8%;
+  }
+}
+
+/* ----- Tutorials ----- */
 .tut-photo {
   display: block; width: 100%; aspect-ratio: 16/10; border-radius: 16px; overflow: hidden;
   margin: 0 0 .9rem; background: var(--bg2);
@@ -25,5 +78,4 @@
 
 @media (max-width: 600px) {
   .m-head-photo { width: 28%; inset-inline-start: 4%; }
-  .slide-art .slide-photo { width: min(38%, 140px); inset-inline-start: 4%; }
 }
