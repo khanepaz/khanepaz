@@ -44,7 +44,6 @@
       <span class="art-emoji" aria-hidden="true">${a.emoji || '🍰'}</span>
       <i class="wisp w1"></i><i class="wisp w2"></i><i class="wisp w3"></i></div>`;
   }
-  /* تصویر مدال دستور: جای ایموجی، با همان انیمیشن bob */
   function modalArt(r) {
     const a = r.art || {};
     if (r.image) {
@@ -484,6 +483,53 @@
       if (e.key === 'Escape') { closeModal(); closeSearch(); closeSidebar(); closeDD(); }
     });
     $('#toTop')?.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+
+    function mailComment(to, data) {
+      return new Promise(resolve => {
+        const frameName = 'kp_mail_' + Date.now();
+        const iframe = document.createElement('iframe');
+        iframe.name = frameName;
+        iframe.setAttribute('aria-hidden', 'true');
+        iframe.style.cssText = 'position:absolute;width:0;height:0;border:0;opacity:0;pointer-events:none';
+        document.body.appendChild(iframe);
+
+        const f = document.createElement('form');
+        f.method = 'POST';
+        f.action = 'https://formsubmit.co/' + encodeURIComponent(to);
+        f.target = frameName;
+        f.style.display = 'none';
+        const fields = {
+          name: data.name,
+          rating: data.rating,
+          recipe: data.recipe,
+          message: data.message,
+          _subject: data.subject,
+          _template: 'table',
+          _captcha: 'false',
+          _honey: ''
+        };
+        Object.keys(fields).forEach(k => {
+          const inp = document.createElement('input');
+          inp.type = 'hidden';
+          inp.name = k;
+          inp.value = fields[k];
+          f.appendChild(inp);
+        });
+        document.body.appendChild(f);
+
+        let done = false;
+        const finish = () => {
+          if (done) return;
+          done = true;
+          setTimeout(() => { try { f.remove(); iframe.remove(); } catch (e) {} }, 2500);
+          resolve(true);
+        };
+        iframe.addEventListener('load', finish);
+        setTimeout(finish, 4000);
+        try { f.submit(); } catch (e) { finish(); }
+      });
+    }
+
     $('#cmForm')?.addEventListener('submit', async e => {
       e.preventDefault();
       const form = e.target;
@@ -509,27 +555,15 @@
       } catch (err) {}
       renderComments();
 
-      let mailed = false;
       const to = (S.site.social && S.site.social.email) || '';
       if (to) {
-        try {
-          const res = await fetch('https://formsubmit.co/ajax/' + encodeURIComponent(to), {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-            body: JSON.stringify({
-              name,
-              rating: rate + ' از ۵',
-              recipe: recipe ? recipe.title : 'کلی (بدون دستور مشخص)',
-              message: text,
-              _subject: 'نظر جدید در خانه‌پز — ' + name,
-              _template: 'table',
-              _captcha: 'false'
-            })
-          });
-          mailed = res.ok;
-        } catch (err) {
-          console.warn('comment mail failed', err);
-        }
+        await mailComment(to, {
+          name,
+          rating: rate + ' از ۵',
+          recipe: recipe ? recipe.title : 'کلی (بدون دستور مشخص)',
+          message: text,
+          subject: 'نظر جدید در خانه‌پز — ' + name
+        });
       }
 
       form.reset();
@@ -537,9 +571,9 @@
       if (btn) { btn.disabled = false; btn.textContent = 'ثبت نظر'; }
       const hint = $('#cmHint');
       if (hint) {
-        hint.textContent = mailed
-          ? 'نظر شما ثبت شد و برای مدیر سایت ارسال گردید. سپاس!'
-          : 'نظر شما در این مرورگر ثبت شد. اگر ایمیل نرسید، یک‌بار لینک فعال‌سازی FormSubmit در ایمیل مدیر را تأیید کنید.';
+        hint.textContent = to
+          ? 'نظر شما ثبت شد. اگر اولین ارسال است، لینک فعال‌سازی FormSubmit را در ایمیل خود (و پوشه هرزنامه) تأیید کنید.'
+          : 'نظر شما در این مرورگر ثبت شد.';
       }
     });
   }
