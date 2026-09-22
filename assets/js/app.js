@@ -44,6 +44,16 @@
       <span class="art-emoji" aria-hidden="true">${a.emoji || '🍰'}</span>
       <i class="wisp w1"></i><i class="wisp w2"></i><i class="wisp w3"></i></div>`;
   }
+  /* تصویر مدال دستور: جای ایموجی، با همان انیمیشن bob */
+  function modalArt(r) {
+    const a = r.art || {};
+    if (r.image) {
+      return `<div class="art" style="--a:${esc(a.from || '#f4c26b')};--b:${esc(a.to || '#c9743a')}">
+        <img class="art-photo" src="${esc(r.image)}" alt="${esc(r.title)}" loading="eager">
+        <i class="wisp w1"></i><i class="wisp w2"></i><i class="wisp w3"></i></div>`;
+    }
+    return art(r);
+  }
   const stars = r => `<span class="stars" style="--r:${Number(r) || 0}" aria-hidden="true">★★★★★</span>`;
 
   function card(r, opts = {}) {
@@ -303,7 +313,7 @@
     history.replaceState(null, '', '#recipe=' + r.id);
     openModal(`
       ${CLOSE_BTN}
-      <div class="m-head">${art(r, 'm-photo', '', true)}
+      <div class="m-head">${modalArt(r)}
         <div class="m-title">
           <h2>${esc(r.title)}</h2>
           <div class="m-chips">
